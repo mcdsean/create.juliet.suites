@@ -213,40 +213,45 @@ if __name__ == '__main__':
 	parser = argparse.ArgumentParser(description = 'This script creates suites for c, cpp and java.')
 	parser.add_argument('language', help='Only one of the following languages must be defined (c, cpp, java)')
 	args = parser.parse_args()
-	suite_language = args.language
+	suite_language = args.language.lower()
 
 
 
 	current_dir = os.getcwd()
-	juliet_test_case_path = current_dir + "\\testcases"
+	test_case_complete_path = current_dir + "\\testcases"
+	juliet_suite_path = current_dir + "\\juliet"
 	juliet_suite_path_true = current_dir + "\\juliet\\T"
 	juliet_suite_path_false = current_dir + "\\juliet\\F"
 	juliet_suite_support_path = current_dir + "\\juliet\\testcasesupport"
 
 
-	if os.path.exists(juliet_suite_support_path):
-		print("Deleting the following directory ... ", juliet_suite_support_path)
-		shutil.rmtree(juliet_suite_support_path)
+	if os.path.exists(juliet_suite_path):
+		print("Deleting the following directory ... ", juliet_suite_path)
+		shutil.rmtree(juliet_suite_path)
 		time.sleep(5)
-	if os.path.exists(juliet_suite_path_true):
-		print("Deleting the following directory ... ", juliet_suite_path_true)
-		shutil.rmtree(juliet_suite_path_true)
-		time.sleep(5)
-	if os.path.exists(juliet_suite_path_false):
-		print("Deleting the following directory ... ", juliet_suite_path_false)		
-		shutil.rmtree(juliet_suite_path_false)
-		time.sleep(5)
+
+	# if os.path.exists(juliet_suite_support_path):
+	# 	print("Deleting the following directory ... ", juliet_suite_support_path)
+	# 	shutil.rmtree(juliet_suite_support_path)
+	# 	time.sleep(5)
+	# if os.path.exists(juliet_suite_path_true):
+	# 	print("Deleting the following directory ... ", juliet_suite_path_true)
+	# 	shutil.rmtree(juliet_suite_path_true)
+	# 	time.sleep(5)
+	# if os.path.exists(juliet_suite_path_false):
+	# 	print("Deleting the following directory ... ", juliet_suite_path_false)
+	# 	shutil.rmtree(juliet_suite_path_false)
+	# 	time.sleep(5)
 
 	
 	# create a full copy of all c-language test cases
-	shutil.copytree(juliet_test_case_path, juliet_suite_path_true)
+	shutil.copytree(test_case_complete_path, juliet_suite_path_true)
 
 	# create random true sub-set
 	create_random_juliet_c_true(juliet_suite_path_true)			
 	# create random false sub-set	
 	create_random_juliet_c_false(juliet_suite_path_true, juliet_suite_path_false)			
 	# copy juliet support files to suite location 
-	#todo: get the following error: Cannot create a file when that file already exists: 'C:\\svn\\create.juliet.suites\\juliet\\testcasesupport'
 	shutil.copytree(current_dir + "\\testcasesupport", current_dir + "\\juliet\\testcasesupport")
 
 	py_common.print_with_timestamp("END: CREATE JULIET SUITE")
