@@ -180,6 +180,7 @@ def removeDir(path):
 	if os.path.isdir(path):
 		time.sleep(1)
 		print("Deleting the following directory ... ", path)
+
 		shutil.rmtree(path)
 
 
