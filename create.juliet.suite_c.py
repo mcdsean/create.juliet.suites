@@ -38,28 +38,26 @@ def create_bat_file(cwe_bat, t_f):
 				print(line.replace("/DOMITGOOD", "/DOMITBAD"), end='')
 			
 	
-def create_random_juliet_c_true(juliet_suite_path_t):
+def create_random_juliet_c_true(juliet_suite_path_t, language):
 
 	for path, dirs, files in os.walk(juliet_suite_path_t):
 		
 		if "juliet" in path:
-			dup_files = []
 			test_case_count = 0
 
 			# number of test cases in this path
 			count = count_files_matching_regex(path, py_common.get_primary_testcase_filename_regex())
 			
-			
-			if path.count("\\") == 2: # top level directory
+
+			if path == juliet_suite_path_t:
 				print("************************************************************************")
 				print("JULIET C TEST CASES (Protection Profile)")
 				print("PATH:", path)
 				print("TEST CASE COUNT (GRAND TOTAL) :", count)
 
-				continue
+				#continue
 						
 			# establish the scaling for this dir or sub-dirs (s01, ...) if applicable
-			#if path.count("\\") == 3:
 			if path.count("\\") == 4:
 				if count in range(0, 600):
 					scaling = "1.0" # keep all tesecases
@@ -134,7 +132,7 @@ def create_random_juliet_c_true(juliet_suite_path_t):
 						else:
 							break
 							
-						if fe.endswith(".c"):
+						if fe.endswith(language):
 						
 							# keep track of count
 							test_case_count = test_case_count + 1
@@ -204,55 +202,49 @@ def create_random_juliet_c_false(suite_path_true, suite_path_false):
 				print("FALSE_bat_file:", cwe_bat)
 				create_bat_file(cwe_bat, "FALSE")
 
-					
 				
 if __name__ == '__main__':
 
 	py_common.print_with_timestamp("START: CREATE JULIET SUITE")
 
 	parser = argparse.ArgumentParser(description = 'This script creates suites for c, cpp and java.')
-	parser.add_argument('language', help='Only one of the following languages must be defined (c, cpp, java)')
+	parser.add_argument('language', help = 'Only one of the following languages must be defined (c, cpp, java)')
 	args = parser.parse_args()
 	suite_language = args.language.lower()
 
+	# construct the paths for the new suite
+	juliet_suite_path = os.path.join(os.getcwd(), 'juliet_' + suite_language + '_suite')
+	test_case_complete_path = os.path.join(juliet_suite_path + '_complete')
+	juliet_suite_path_true = os.path.join(juliet_suite_path, 'T')
+	juliet_suite_path_false = os.path.join(juliet_suite_path, 'F')
+	juliet_suite_support_path_source = os.path.join(os.getcwd(), 'testcasesupport')
+	juliet_suite_support_path_dest = os.path.join(juliet_suite_path, 'testcasesupport')
 
-
-	current_dir = os.getcwd()
-	test_case_complete_path = current_dir + "\\testcases"
-	juliet_suite_path = current_dir + "\\juliet"
-	juliet_suite_path_true = current_dir + "\\juliet\\T"
-	juliet_suite_path_false = current_dir + "\\juliet\\F"
-	juliet_suite_support_path = current_dir + "\\juliet\\testcasesupport"
-
-
-	if os.path.exists(juliet_suite_path):
-		print("Deleting the following directory ... ", juliet_suite_path)
-		shutil.rmtree(juliet_suite_path)
+	# delete folders from previuos run
+	if os.path.exists(juliet_suite_path_true):
+		print("Deleting the following directory ... ", juliet_suite_path_true)
+		shutil.rmtree(juliet_suite_path_true)
+		time.sleep(5)
+	if os.path.exists(juliet_suite_path_false):
+		print("Deleting the following directory ... ", juliet_suite_path_false)
+		shutil.rmtree(juliet_suite_path_false)
+		time.sleep(5)
+	if os.path.exists(juliet_suite_support_path_dest):
+		print("Deleting the following directory ... ", juliet_suite_support_path_dest)
+		shutil.rmtree(juliet_suite_support_path_dest)
 		time.sleep(5)
 
-	# if os.path.exists(juliet_suite_support_path):
-	# 	print("Deleting the following directory ... ", juliet_suite_support_path)
-	# 	shutil.rmtree(juliet_suite_support_path)
-	# 	time.sleep(5)
-	# if os.path.exists(juliet_suite_path_true):
-	# 	print("Deleting the following directory ... ", juliet_suite_path_true)
-	# 	shutil.rmtree(juliet_suite_path_true)
-	# 	time.sleep(5)
-	# if os.path.exists(juliet_suite_path_false):
-	# 	print("Deleting the following directory ... ", juliet_suite_path_false)
-	# 	shutil.rmtree(juliet_suite_path_false)
-	# 	time.sleep(5)
-
-	
 	# create a full copy of all c-language test cases
 	shutil.copytree(test_case_complete_path, juliet_suite_path_true)
 
-	# create random true sub-set
-	create_random_juliet_c_true(juliet_suite_path_true)			
-	# create random false sub-set	
-	create_random_juliet_c_false(juliet_suite_path_true, juliet_suite_path_false)			
-	# copy juliet support files to suite location 
-	shutil.copytree(current_dir + "\\testcasesupport", current_dir + "\\juliet\\testcasesupport")
+	# create random true suite
+	create_random_juliet_c_true(juliet_suite_path_true, suite_language)
+	# create matching false suite
+	create_random_juliet_c_false(juliet_suite_path_true, juliet_suite_path_false)
+
+	# copy juliet support files to suite location
+	if suite_language == 'c' or 'cpp':
+		shutil.copytree(juliet_suite_support_path_source, juliet_suite_support_path_dest)
 
 	py_common.print_with_timestamp("END: CREATE JULIET SUITE")
 	
