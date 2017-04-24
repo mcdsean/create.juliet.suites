@@ -24,6 +24,7 @@ def disable_cpp_refs_in_main_cpp(main_cpp):
 			for line in file:
 				print(line.replace("#ifdef __cplusplus", "#if 0"), end='')
 
+
 def create_bat_file(cwe_bat, t_f):	
 	if t_f == "TRUE":
 		with fileinput.FileInput(cwe_bat, inplace=True) as file:
@@ -47,14 +48,11 @@ def create_random_juliet_c_true(juliet_suite_path_t, language):
 		# number of test cases in this path
 		count = count_files_matching_regex(path, py_common.get_primary_testcase_filename_regex())
 
-
 		if path == juliet_suite_path_t:
 			print("************************************************************************")
 			print("JULIET C TEST CASES (Protection Profile)")
 			print("PATH:", path)
 			print("TEST CASE COUNT (GRAND TOTAL) :", count)
-
-			#continue
 
 			# establish the scaling
 			if count in range(0, 600):
@@ -70,18 +68,12 @@ def create_random_juliet_c_true(juliet_suite_path_t, language):
 			else: # >3999
 				scaling = "0.5" # keep 0.5
 
-		# for root, dirs, files in os.walk(starting_directory):
-		# 	if not dirs:
-
-		#if path.count("\\") >= 4:
+		# use only the right-most folders
 		if not dirs:
 
 			# full path to 'main.cpp' and 'main.cpp.back'
 			main_cpp = os.path.join(path, "main.cpp")
 			main_cpp_back = os.path.join(path, "main.cpp.back")
-			# full path to 'testcases.h' and 'testcases.h.back'
-			###testcases_h = os.path.join(path, "testcases.h")
-			###testcase_h_back = os.path.join(path, "testcases.h.back")
 
 			if os.path.exists(main_cpp):
 
@@ -208,21 +200,8 @@ if __name__ == '__main__':
 	juliet_suite_support_path_source = os.path.join(os.getcwd(), 'testcasesupport')
 	juliet_suite_support_path_dest = os.path.join(juliet_suite_path, 'testcasesupport')
 
-
+	# remove files from previuos run
 	removeDir(juliet_suite_path)
-	# delete folders from previuos run
-	# if os.path.exists(juliet_suite_path_true):
-	# 	print("Deleting the following directory ... ", juliet_suite_path_true)
-	# 	shutil.rmtree(juliet_suite_path_true)
-	# 	time.sleep(5)
-	# if os.path.exists(juliet_suite_path_false):
-	# 	print("Deleting the following directory ... ", juliet_suite_path_false)
-	# 	shutil.rmtree(juliet_suite_path_false)
-	# 	time.sleep(5)
-	# if os.path.exists(juliet_suite_support_path_dest):
-	# 	print("Deleting the following directory ... ", juliet_suite_support_path_dest)
-	# 	shutil.rmtree(juliet_suite_support_path_dest)
-	# 	time.sleep(5)
 
 	# create a full copy of all c-language test cases
 	shutil.copytree(test_case_complete_path, juliet_suite_path_true)
