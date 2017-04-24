@@ -209,7 +209,14 @@ def create_random_juliet_c_false(suite_path_true, suite_path_false):
 if __name__ == '__main__':
 
 	py_common.print_with_timestamp("START: CREATE JULIET SUITE")
-	
+
+	parser = argparse.ArgumentParser(description = 'This script creates suites for c, cpp and java.')
+	parser.add_argument('language', help='Only one of the following languages must be defined (c, cpp, java)')
+	args = parser.parse_args()
+	suite_language = args.language
+
+
+
 	current_dir = os.getcwd()
 	juliet_test_case_path = current_dir + "\\testcases"
 	juliet_suite_path_true = current_dir + "\\juliet\\T"
