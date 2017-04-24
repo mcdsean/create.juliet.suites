@@ -229,6 +229,7 @@ if __name__ == '__main__':
 		print("Deleting the following directory ... ", juliet_suite_path_false)		
 		shutil.rmtree(juliet_suite_path_false)
 		time.sleep(5)
+
 	
 	# create a full copy of all c-language test cases
 	shutil.copytree(juliet_test_case_path, juliet_suite_path_true)
