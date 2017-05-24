@@ -6,6 +6,7 @@ test_case_list = []
 dirsAndFiles = {}  
 
 def count_files_matching_regex(directory, regex):
+
 	count = 0
 	"""
 	Counts files that match a regex in a certain directory (recursively, case-insensitive).
