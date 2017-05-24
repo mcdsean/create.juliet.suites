@@ -94,7 +94,7 @@ def create_random_juliet_c_true(juliet_suite_path_t, language):
 						# make backup of .bat file
 						if not os.path.exists(cwe_bat_back):
 							shutil.copy(cwe_bat, cwe_bat_back)
-							#os.path.splitext(cwe_bat)[0]+'.back'
+							# os.path.splitext(cwe_bat)[0]+'.back'
 						create_bat_file(cwe_bat, "TRUE")
 
 			print("------------------------------------------------------------------------")
