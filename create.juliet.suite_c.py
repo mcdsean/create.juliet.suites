@@ -1,5 +1,4 @@
 import random, shutil, os, argparse, time
-
 import py_common, fileinput 
 
 test_case_list = []
@@ -57,7 +56,7 @@ def create_random_juliet_c_true(juliet_suite_path_t, language):
 
 			# establish the scaling
 			if count in range(0, 600):
-				scaling = "1.0" # keep all tesecases
+				scaling = "1.0" # keep all test cases
 			elif count in range(601, 999):
 				scaling = "0.9" # keep 0.9
 			elif count in range(1000, 1999):
@@ -156,9 +155,9 @@ def create_random_juliet_c_true(juliet_suite_path_t, language):
 					# comment out all lines corresponding to the deleted files
 					with fileinput.FileInput(main_cpp, inplace=True) as file:
 						for line in file:
-							curent_line_in_main_cpp = "\t" + reference_to_look_for_in_main_cpp
+							current_line_in_main_cpp = "\t" + reference_to_look_for_in_main_cpp
 							new_line_in_main_cpp = "\t//" + reference_to_look_for_in_main_cpp
-							print(line.replace(curent_line_in_main_cpp, new_line_in_main_cpp), end='')
+							print(line.replace(current_line_in_main_cpp, new_line_in_main_cpp), end='')
 
 
 def create_random_juliet_c_false(suite_path_true, suite_path_false):
@@ -177,7 +176,7 @@ def create_random_juliet_c_false(suite_path_true, suite_path_false):
 				create_bat_file(cwe_bat, "FALSE")
 
 
-def removeDir(path):
+def remove_dir(path):
 	if os.path.isdir(path):
 		time.sleep(1)
 		print("Deleting the following directory ... ", path)
@@ -189,8 +188,8 @@ if __name__ == '__main__':
 
 	py_common.print_with_timestamp("START: CREATE JULIET SUITE")
 
-	parser = argparse.ArgumentParser(description = 'This script creates suites for c, cpp and java.')
-	parser.add_argument('language', help = 'Only one of the following languages must be defined (c, cpp, java)')
+	parser = argparse.ArgumentParser(description='This script creates suites for c, cpp and java.')
+	parser.add_argument('language', help='Only one of the following languages must be defined (c, cpp, java)')
 	args = parser.parse_args()
 	suite_language = args.language.lower()
 
@@ -202,8 +201,8 @@ if __name__ == '__main__':
 	juliet_suite_support_path_source = os.path.join(os.getcwd(), 'testcasesupport')
 	juliet_suite_support_path_dest = os.path.join(juliet_suite_path, 'testcasesupport')
 
-	# remove files from previuos run
-	removeDir(juliet_suite_path)
+	# remove files from previous run
+	remove_dir(juliet_suite_path)
 
 	# create a full copy of all c-language test cases
 	shutil.copytree(test_case_complete_path, juliet_suite_path_true)
@@ -218,13 +217,3 @@ if __name__ == '__main__':
 		shutil.copytree(juliet_suite_support_path_source, juliet_suite_support_path_dest)
 
 	py_common.print_with_timestamp("END: CREATE JULIET SUITE")
-	
-	
-	
-	
-	
-	
-	
-	
-	
-	
